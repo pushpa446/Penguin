@@ -1,29 +1,26 @@
-const express = require('express');
-const app = express();
-var https = require('http');
+const request = require('superagent');
+const API_HOST = 'http://localhost';
+const API_PORT = 8080;
+const API_ENDPOINT = `${API_HOST}:${API_PORT}`;
 
-// app.get('/', (req, res) => res.send('Hello World!'))
-
-// app.listen(3000, () => console.log('Example app listening on port 3000!'))
-
-var optionsget = {
-    host : '127.0.0.1',
-    port : 3001,
-    path : '/users',
-    method : 'GET'
+// Fetch provider data
+const fetchProviderData = () => {
+    return request
+        .get(`${API_ENDPOINT}/products/1234`)
+        .then((res) => {
+            if (res.body.price) {
+                return {
+                 price:res.body.price
+                }
+            } else {
+                throw new Error('Invalid date format in response')
+            }
+        }, (err) => {
+            throw new Error(`Error from response: ${err.body}`)
+        })
 };
 
-var reqGet = https.request(optionsget, function(res) {
-    console.log("statusCode: ", res.statusCode);
-    res.on('data', function(d) {
-        console.info('GET result:\n');
-        process.stdout.write(d);
-        console.info('\n\nCall completed');
-    });
-
-});
-
-reqGet.end();
-reqGet.on('error', function(e) {
-    console.error(e);
-});
+// fetchProviderData("1234");
+module.exports = {
+    fetchProviderData
+};
