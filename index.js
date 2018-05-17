@@ -1,17 +1,15 @@
 const request = require('superagent');
-const API_HOST = 'http://localhost';
-const API_PORT = 8080;
-const API_ENDPOINT = `${API_HOST}:${API_PORT}`;
+global.API_HOST = 'http://localhost';
+global.API_PORT = 8080;
 
 // Fetch provider data
 const fetchProviderData = () => {
+    const API_ENDPOINT = `${global.API_HOST}:${global.API_PORT}`;
     return request
         .get(`${API_ENDPOINT}/products/1234`)
         .then((res) => {
             if (res.body.price) {
-                return {
-                 price:res.body.price
-                }
+                return res.body;
             } else {
                 throw new Error('Invalid date format in response')
             }
@@ -20,7 +18,6 @@ const fetchProviderData = () => {
         })
 };
 
-// fetchProviderData("1234");
 module.exports = {
     fetchProviderData
 };

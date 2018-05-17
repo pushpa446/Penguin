@@ -3,15 +3,16 @@ const path = require('path');
 const chaiAsPromised = require('chai-as-promised');
 const pact = require('pact');
 const expect = chai.expect;
-const API_PORT = 9123;
 const {fetchProviderData} = require('./index');
 chai.use(chaiAsPromised);
+const { somethingLike: like } = pact.Matchers;
 
 const LOG_LEVEL = process.env.LOG_LEVEL || 'WARN';
+const API_PORT = 9123;
 
 const provider = pact({
     consumer: 'penguin',
-    provider: 'ProductService',
+    provider: 'product-service',
     port: API_PORT,
     log: path.resolve(process.cwd(), 'logs', 'pact.log'),
     dir: path.resolve(process.cwd(), 'pacts'),
@@ -20,12 +21,13 @@ const provider = pact({
 });
 
 
-describe('Pact with Our Provider', () => {
-
+describe('Product Service', () => {
     before(() => {
+        global.API_PORT = API_PORT;
         return provider.setup()
     });
-    describe('should return with product details', () => {
+
+    describe('Product Details', () => {
         before(() => {
             return provider.addInteraction({
                 state: 'HasProduct',
@@ -39,18 +41,22 @@ describe('Pact with Our Provider', () => {
                     headers: {
                         'Content-Type': 'application/json; charset=utf-8'
                     },
-                    body: {
-                        price: 345
-                    }
+                    body: like({
+                        id: "1234",
+                        name: "Shoe",
+                        price: 345.0
+                    })
                 }
             })
         });
 
-        it('can process the JSON payload from the provider', () => {
-            var expectedBody = {
-                price: 345
+        it('should get product details given a request is made with product id', () => {
+            const expectedBody = {
+                id: "1234",
+                name: "Shoe",
+                price: 345.0
             };
-            fetchProviderData().then(response => {
+            return fetchProviderData().then(response => {
                     expect(response).to.deep.equals(expectedBody)
                 }
             );
