@@ -30,7 +30,7 @@ describe('Product Service', () => {
     describe('Product Details', () => {
         before(() => {
             return provider.addInteraction({
-                state: 'HasProduct',
+                state: 'HasProductDetails',
                 uponReceiving: 'a request for product data',
                 withRequest: {
                     method: 'GET',
