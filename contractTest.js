@@ -3,7 +3,7 @@ const path = require('path');
 const chaiAsPromised = require('chai-as-promised');
 const pact = require('pact');
 const expect = chai.expect;
-const {fetchProviderData} = require('./index');
+const {getProductDetails} = require('./index');
 chai.use(chaiAsPromised);
 const { somethingLike: like } = pact.Matchers;
 
@@ -56,7 +56,7 @@ describe('Product Service', () => {
                 name: "Shoe",
                 price: 345.0
             };
-            return fetchProviderData().then(response => {
+            return getProductDetails().then(response => {
                     expect(response).to.deep.equals(expectedBody)
                 }
             );

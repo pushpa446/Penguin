@@ -12,4 +12,3 @@ pact.publishPacts(opts)
         console.error('Pact contract publishing failed: ', e);
         process.exit(1);
     });
-

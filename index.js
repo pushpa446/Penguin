@@ -2,8 +2,8 @@ const request = require('superagent');
 global.API_HOST = 'http://localhost';
 global.API_PORT = 8080;
 
-// Fetch provider data
-const fetchProviderData = () => {
+// Fetch provider(ProductService) data for single product
+const getProductDetails = () => {
     const API_ENDPOINT = `${global.API_HOST}:${global.API_PORT}`;
     return request
         .get(`${API_ENDPOINT}/products/1234`)
@@ -11,7 +11,7 @@ const fetchProviderData = () => {
             if (res.body.price) {
                 return res.body;
             } else {
-                throw new Error('Invalid date format in response')
+                throw new Error('Invalid productDetails format in response')
             }
         }, (err) => {
             throw new Error(`Error from response: ${err.body}`)
@@ -19,5 +19,5 @@ const fetchProviderData = () => {
 };
 
 module.exports = {
-    fetchProviderData
+    getProductDetails: getProductDetails
 };
