@@ -3,17 +3,17 @@ const path = require('path');
 const chaiAsPromised = require('chai-as-promised');
 const pact = require('pact');
 const expect = chai.expect;
-const {getProductDetails} = require('./index');
+const {getProductList} = require('./index');
 chai.use(chaiAsPromised);
-const { somethingLike: like } = pact.Matchers;
+const {somethingLike: like} = pact.Matchers;
 
 const LOG_LEVEL = process.env.LOG_LEVEL || 'WARN';
-const API_PORT = 9123;
+const CATEGORY_PORT = 9124;
 
 const provider = pact({
     consumer: 'penguin',
-    provider: 'product-service',
-    port: API_PORT,
+    provider: 'category-service',
+    port: CATEGORY_PORT,
     log: path.resolve(process.cwd(), 'logs', 'pact.log'),
     dir: path.resolve(process.cwd(), 'pacts'),
     logLevel: LOG_LEVEL,
@@ -21,20 +21,20 @@ const provider = pact({
 });
 
 
-describe('Product Service', () => {
+describe('Category Service', () => {
     before(() => {
-        global.API_PORT = API_PORT;
+        global.CATEGORY_PORT = CATEGORY_PORT;
         return provider.setup()
     });
 
-    describe('Product Details', () => {
+    describe('Product Lists', () => {
         before(() => {
             return provider.addInteraction({
-                state: 'HasProduct',
-                uponReceiving: 'a request for product data',
+                state: 'HasProductList',
+                uponReceiving: 'a request for productList',
                 withRequest: {
                     method: 'GET',
-                    path: '/products/1234'
+                    path: '/category/12345'
                 },
                 willRespondWith: {
                     status: 200,
@@ -42,21 +42,25 @@ describe('Product Service', () => {
                         'Content-Type': 'application/json; charset=utf-8'
                     },
                     body: like({
-                        id: "1234",
-                        name: "Shoe",
-                        price: 345.0
+                        id: '12345',
+                        products:
+                            [{id: '1234', name: 'Table', price: 450},
+                                {id: '4567', name: 'Table', price: 450},
+                                {id: '891', name: 'Table', price: 450}]
                     })
                 }
             })
         });
 
-        it('should get product details given a request is made with product id', () => {
+        it('should get productList given a request is made with category id', () => {
             const expectedBody = {
-                id: "1234",
-                name: "Shoe",
-                price: 345.0
+                id: '12345',
+                products:
+                    [{id: '1234', name: 'Table', price: 450},
+                        {id: '4567', name: 'Table', price: 450},
+                        {id: '891', name: 'Table', price: 450}]
             };
-            return getProductDetails().then(response => {
+            return getProductList().then(response => {
                     expect(response).to.deep.equals(expectedBody)
                 }
             );

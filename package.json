@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node client.js",
-    "test": "./node_modules/.bin/mocha --timeout 10000 ./contractTest.js"
+    "test": "./node_modules/.bin/mocha --timeout 10000 \"*.spec.js\""
   },
   "author": "",
   "license": "ISC",
