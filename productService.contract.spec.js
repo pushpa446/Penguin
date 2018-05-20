@@ -39,7 +39,7 @@ describe('Product Service', () => {
                 willRespondWith: {
                     status: 200,
                     headers: {
-                        'Content-Type': 'application/json; charset=utf-8'
+                        'Content-Type': 'application/json;charset=UTF-8'
                     },
                     body: like({
                         id: "1234",
