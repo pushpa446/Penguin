@@ -34,7 +34,7 @@ describe('Product Service', () => {
                 uponReceiving: 'a request for product data',
                 withRequest: {
                     method: 'GET',
-                    path: '/products/1234'
+                    path: '/products/123'
                 },
                 willRespondWith: {
                     status: 200,
@@ -42,7 +42,7 @@ describe('Product Service', () => {
                         'Content-Type': 'application/json;charset=UTF-8'
                     },
                     body: like({
-                        id: "1234",
+                        id: 123,
                         name: "Shoe",
                         price: 345.0
                     })
@@ -52,7 +52,7 @@ describe('Product Service', () => {
 
         it('should get product details given a request is made with product id', () => {
             const expectedBody = {
-                id: "1234",
+                id: 123,
                 name: "Shoe",
                 price: 345.0
             };

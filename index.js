@@ -7,7 +7,7 @@ global.CATEGORY_PORT = 8090;
 const getProductDetails = () => {
     const PRODUCT_API_ENDPOINT = `${global.API_HOST}:${global.PRODUCT_PORT}`;
     return request
-        .get(`${PRODUCT_API_ENDPOINT}/products/1234`)
+        .get(`${PRODUCT_API_ENDPOINT}/products/123`)
         .then((res) => {
             if (res.body.price) {
                 return res.body;
